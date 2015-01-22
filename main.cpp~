@@ -1,0 +1,113 @@
+#include <iostream>
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+
+using namespace std;
+int r[20],s[5];
+
+bool is_tonghua()
+{
+    for(int i=1;i<=4;i++)
+        if(s[i]==5)
+            return true;
+    return false;
+}
+bool is_shunzi()
+{
+    r[14]=r[1];
+    int ok=1;
+    for(int i=10;i<=14;i++)
+    {
+        if(r[i]!=1)
+        {
+            ok=0;
+            break;
+        }
+    }
+    if(ok)
+        return true;
+    for(int i=1;i<=14;i++)
+    {
+        if(r[i]!=0)
+        {
+            for(int j=i+1;j<=i+4;j++)
+            {
+                if(r[j]==0)
+                    return false;
+            }
+            break;
+        }
+    }
+    return true;
+}
+
+bool com(int a,int b)
+{
+    return a>b;
+}
+
+int main()
+{
+    freopen("/home/xiaogao/poker-hand-testing.txt","r",stdin);
+    freopen("/home/xiaogao/result.txt","w+",stdout);
+    int a;
+    while(scanf("%d",&a)==1)
+    {
+        memset(s,0,sizeof(s));
+        memset(r,0,sizeof(r));
+        s[a]++;
+        for(int i=2;i<=10;i++)
+        {
+            cin.get();
+            scanf("%d",&a);
+            if(i%2==0)
+                r[a]++;
+            else
+                s[a]++;
+        }
+        cin.get();
+        int b;
+        scanf("%d",&b);
+        int ans;
+        if(is_tonghua())
+        {
+            if(is_shunzi())
+            {
+                if(r[14]!=0&&r[13]!=0)
+                    printf("9\n");
+                else
+                    printf("8\n");
+            }
+            else
+                printf("5\n");
+            continue;
+        }
+        if(is_shunzi())
+        {
+            printf("4\n");
+            continue;
+        }
+        r[14]=0;
+        sort(r,r+15,com);
+        if(r[0]==4)
+            printf("7\n");
+        else if(r[0]==3)
+        {
+            if(r[1]==2)
+                printf("6\n");
+            else
+                printf("3\n");
+        }
+        else if(r[0]==2)
+        {
+            if(r[1]==2)
+                printf("2\n");
+            else
+                printf("1\n");
+        }
+        else
+            printf("0 %d\n",b);
+    }
+    return 0;
+}
